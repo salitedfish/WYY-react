@@ -1,26 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { memo } from 'react'
+import { renderRoutes } from "react-router-config"
+import { HashRouter } from "react-router-dom"
 
-function App() {
+import routes from "@/router"
+
+import GxkAppHeader from "@/components/app-header"
+import GxkAppFooter from "@/components/app-footer"
+
+export default memo(function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <h2>hellow codergxk</h2>
-      </header>
-    </div>
-  );
-}
+    <HashRouter>
+      {/*路由最外层必须用HashRouter或BrowerRouter包裹，vue中直接用router-view就行了*/}
 
-export default App;
+      {/*项目头部 */}
+      <GxkAppHeader></GxkAppHeader>
+      {/*项目主要内容 */}
+      {
+        renderRoutes(routes)
+      }
+      {/*项目底部 */}
+      <GxkAppFooter></GxkAppFooter>
+    </HashRouter>
+  )
+})
