@@ -23,7 +23,6 @@ const routes = [
   },
   {
     path: '/discover',
-    // exact: true,
     component: GxkDiscover,
     // 发现音乐里面还存在子路由，用routes来写，vue里面使用children
     routes: [
