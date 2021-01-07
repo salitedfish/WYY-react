@@ -125,3 +125,6 @@ export const hotRadios = [
       url:"/user/home?id=2313954"
   }
 ]
+
+//新碟上架一页展示的数据
+export const AlbumCount = 5

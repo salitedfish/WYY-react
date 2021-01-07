@@ -11,7 +11,7 @@ import { DiscoverWrapper, TopMenu } from "./style.js"
 import { discoverMenu } from "@/static/local-data.js"
 
 export default memo(function GxkDiscover(props) {
-  //用了renderRoutes之后，其后代组件可以在props中拿到当前的route
+  //用了renderRoutes之后，其后代组件可以在props中拿到当前的route，这个和vue也挺相似就是通过useRoute获得当前的route
   const { route } = props
   return (
     <DiscoverWrapper>

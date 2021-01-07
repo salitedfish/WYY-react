@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom"
 import { Input } from "antd"
 import { SearchOutlined } from "@ant-design/icons"
 
+//导入相关组件，包括样式组件和功能性组件
 import { HeaderWrapper } from "./style.js"
 import { headerLinks } from "@/static/local-data.js"
 
