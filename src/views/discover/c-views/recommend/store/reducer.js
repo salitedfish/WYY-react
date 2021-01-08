@@ -14,9 +14,9 @@ const defaultState = Map({
   topBanners: [],
   hotRecommends: [],
   news: [],
-  uptops: [],
-  newtops: [],
-  oritops: [],
+  uptops: {},
+  newtops: {},
+  oritops: {},
 })
 
 //设置recommend的reducer，每个组件分开管理自己的reducer

@@ -17,7 +17,7 @@ export default memo(function GxkNew() {
   const news = useSelector((store) => {
     return store.get('recommend').get('news')
   }, shallowEqual)
-
+ 
   //运用react-redux的hook获取到dispatch
   const dispatch = useDispatch()
 

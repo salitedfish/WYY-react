@@ -1,0 +1,1 @@
+export const GETSONG = 'GET_SONG';

@@ -10,7 +10,7 @@ export default memo(function GxkNewCover(props) {
 
   //解构出使用者导入的props数据,默认值都是100
   const { data, width = 100, size = 100, bgp = '-845px' } = props
-
+  
   return (
     <NewWrapper width={width} size={size} bgp={bgp}>
       <div className={'album-image'}>

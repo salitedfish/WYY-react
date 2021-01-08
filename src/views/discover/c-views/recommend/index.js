@@ -6,6 +6,9 @@ import GxkBanner from "./recom-cpn/banner"
 import GxkHot from "./recom-cpn/hot"
 import GxkNew from "./recom-cpn/new"
 import GxkRcmRanking from "./recom-cpn/rcm-ranking"
+import GxkHotRadio from "./recom-cpn/hot-radio"
+import GxkSettleSinger from "./recom-cpn/settle-singer"
+import GxkUserLogin from "./recom-cpn/user-login"
 
 // 定义GxkRecommend组件
 function GxkRecommend() {
@@ -24,6 +27,9 @@ function GxkRecommend() {
         </RecommendLeft>
 
         <RecommendRight>
+          <GxkUserLogin></GxkUserLogin>
+          <GxkSettleSinger></GxkSettleSinger>
+          <GxkHotRadio></GxkHotRadio>
         </RecommendRight>
 
       </Content>

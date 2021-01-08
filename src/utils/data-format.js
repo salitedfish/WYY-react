@@ -10,6 +10,7 @@ export function getCount(count) {
 
 //这个函数是对图片的url进行格式化，对请求的图片大小进行一个限制
 export function getImgUrl(url, size = 140) {
+  if (!url) return
   if (url.indexOf('?') < 0) {
     return `${url}?param=${size}x${size}`
   } else {

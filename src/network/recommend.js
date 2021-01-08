@@ -36,3 +36,13 @@ export function getRanking(idx = 0) {
     }
   })
 }
+
+//通过歌曲id请求歌曲详情
+export function getSon(ids = 0){
+  return myAxios({
+    url: '/song/detail',
+    params: {
+      ids
+    }
+  })
+}

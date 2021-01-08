@@ -1,13 +1,14 @@
 import React, { memo } from 'react'
 import { renderRoutes } from "react-router-config"
-import { HashRouter } from "react-router-dom"
-import { Provider } from "react-redux"
 
 import routes from "@/router"
 import store from "@/store"
 
+import { HashRouter } from "react-router-dom"
+import { Provider } from "react-redux"
 import GxkAppHeader from "@/components/app-header"
 import GxkAppFooter from "@/components/app-footer"
+import GxkPlayerBar from "@/views/player/player-bar"
 
 export default memo(function App() {
   return (
@@ -23,6 +24,8 @@ export default memo(function App() {
         }
         {/*项目底部 */}
         <GxkAppFooter></GxkAppFooter>
+        {/*这里是音乐播放条 */}
+        <GxkPlayerBar></GxkPlayerBar>
       </HashRouter>
     </Provider>
   )
