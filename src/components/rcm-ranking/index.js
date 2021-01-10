@@ -1,10 +1,12 @@
 import React, { memo } from 'react'
+import { useDispatch } from "react-redux"
 
 //导入图片处理函数，这里比较特殊，因为父组件都是通过子组件数组
 //渲染的方式使用子组件，当数组为空时就不会出现找不到数组的情况，
 //而现在是直接通过对象获取数据，如果对象为空，会找不到数据而报错，
 //因此要加一层判断
 import { getImgUrl } from "@/utils/data-format"
+import { getSongAction, addSongAction } from "@/views/player/store"
 
 //导入样式及功能组件
 import { RankingWrapper } from "./style.js"
@@ -12,6 +14,17 @@ import { RankingWrapper } from "./style.js"
 export default memo(function GxkRanking(props) {
 
   const { data } = props
+
+  const dispatch = useDispatch()
+
+  //根据id派发改变store里面的player数据
+  const playSong = (id) => {
+    dispatch(getSongAction(id))
+  }
+
+  const addSong = (id) => {
+    dispatch(addSongAction(id))
+  }
 
   return (
     <RankingWrapper>
@@ -41,8 +54,13 @@ export default memo(function GxkRanking(props) {
                     {item.name}
                   </a>
                   <div className={'operate'}>
-                    <button className={'btn sprite_02 play'}></button>
-                    <button className={'btn sprite_icon2 addto'}></button>
+                    {/*三个按钮 */}
+                    <button className={'btn sprite_02 play'}
+                      onClick={() => { playSong(item.id) }}></button>
+
+                    <button className={'btn sprite_icon2 addto'}
+                      onClick={() => { addSong(item.id) }}></button>
+
                     <button className={'btn sprite_02 favor'}></button>
                   </div>
                 </div>

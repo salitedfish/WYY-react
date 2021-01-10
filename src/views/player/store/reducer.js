@@ -1,16 +1,25 @@
 import { Map } from "immutable"
 
-import { GETSONG } from './static'
+import { GETSONG, CHANGE_PLAY_LIST, CHANGE_SONG_INDEX, CHNAGE_SEQUENCE } from './static'
 
 const defaultState = Map({
-  currentSong: []
+  currentSong: [],
+  currentSongIndex: 0,
+  playList: [],
+  sequence: 0,//0为循环，1为随机，2为单曲
 })
 
 //这个是player的store的reducer
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case GETSONG:
-      return state.set('currentSong',action.currentSong)
+      return state.set('currentSong', action.currentSong)
+    case CHANGE_PLAY_LIST:
+      return state.set('playList', action.playList)
+    case CHANGE_SONG_INDEX:
+      return state.set('currentSongIndex', action.currentSongIndex)
+    case CHNAGE_SEQUENCE:
+      return state.set('sequence', action.sequence)
     default:
       return state
   }

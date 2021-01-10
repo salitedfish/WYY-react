@@ -12,6 +12,7 @@ import GxkSongs from "@/views/discover/c-views/songs"
 import GxkDjradio from "@/views/discover/c-views/djradio"
 import GxkSingers from "@/views/discover/c-views/singers"
 import GxkAlbum from "@/views/discover/c-views/album"
+import GxkPlayer from "@/views/player"
 
 const routes = [
   {
@@ -56,6 +57,10 @@ const routes = [
       {
         path: "/discover/album",
         component: GxkAlbum,
+      },
+      {
+        path: "/discover/player",
+        component: GxkPlayer,
       },
     ]
   },
