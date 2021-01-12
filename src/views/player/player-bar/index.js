@@ -7,6 +7,7 @@ import React,
   useState,
   useCallback
 } from 'react'
+
 import {
   useDispatch,
   useSelector,
@@ -18,8 +19,10 @@ import { NavLink } from "react-router-dom"
 import {
   getSongAction,
   autoChangeSongAction,
-  getChangeSequenceAction
+  getChangeSequenceAction,
+  changeIsplaying
 } from "../store"
+
 import {
   getImgUrl,
   getData,
@@ -28,6 +31,7 @@ import {
 
 //导入相关组件，包括样式组件和功能组件
 import { Slider } from 'antd';
+
 import {
   PlayerBarWrapper,
   Control,
@@ -41,13 +45,12 @@ export default memo(function GxkPlayerBar() {
 
 
   //使用useState管理本组件数据
-  const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [songProgress, setSongProgress] = useState(0)
   const [isChange, setIsChange] = useState(false)
 
 
-  //使用react-redux的hook生成dispatch和store
+  //使用react-redux的hook生成dispatch和store的数据
   const dispatch = useDispatch()
   const index = useSelector((state) => {
     return state.get('player').get('currentSongIndex')
@@ -58,49 +61,91 @@ export default memo(function GxkPlayerBar() {
   const playList = useSelector((state) => {
     return state.get('player').get('playList')
   }, shallowEqual)
-
-
-  //使用react-redux的hook获得state的数据
+  const isPlaying = useSelector((state) => {
+    return state.get('player').get('isPlaying')
+  }, shallowEqual)
   const song = useSelector((state) => {
     return state.get('player').get('currentSong')
   }, shallowEqual)
 
+  //使用react的hook，做和类组件生命周期函数类似的工作,注意不同功能的effect最好不要写在一起
+  //以免引起不必要的刷新
+
+  //使用react的hook获得ref
+  const audioRef = useRef()
+  //初始化时就派发一个获取歌曲的初始action，后面都不会再用了
+  useEffect(() => {
+    dispatch(getSongAction(167876))
+  }, [dispatch])
+  //当state里面选中的歌曲改变时，重新给audio添加上src
+  const url = 'https://music.163.com/song/media/outer/url'
+  useEffect(() => {
+    audioRef.current.src = getPlaySong(url, song.id)
+    setCurrentTime(0)
+  }, [url, song.id])
+  //每当歌曲改变和播放状态改变时执行，按照播放状态判断是否播放
+  useEffect(() => {
+    if (isPlaying) {
+      audioRef.current.play()
+    } else {
+      audioRef.current.pause()
+    }
+  }, [isPlaying, song.id])
 
   //获取歌曲的总时长,并使用时间格式化函数进行格式化
   const totalTime = song.dt || 0
   const resTime = getData(totalTime, 'mm:ss')
 
-
-  //使用react的hook，做和类组件生命周期函数类似的工作
-  useEffect(() => {
-    dispatch(getSongAction(167876))
-  }, [dispatch])
-
-  const url = 'https://music.163.com/song/media/outer/url'
-  useEffect(() => {
-    audioRef.current.src = getPlaySong(url, song.id)
-  }, [url, song])
-
-
-  //使用hook获得ref
-  const audioRef = useRef()
-
-
-  //设置播放和暂停歌曲的函数
+  //点击播放和暂停歌曲的函数,注意这里只是改变state的播放状态
   const songPlayControl = useCallback(() => {
-    // if (!startPlay) {
-    //   setStartPlay(true)
-    // }
-    if (!isPlaying) {
-      audioRef.current.play()
-    } else {
-      audioRef.current.pause()
+    dispatch(changeIsplaying(!isPlaying))
+  }, [isPlaying, dispatch])
+
+  //切换下一首歌曲,根据sequence和index来判断
+  const changeNextSong = () => {
+    //如果歌单里面只有一首歌则直接重新播放
+    if (playList.length === 1) {
+      audioRef.current.currentTime = 0
+      setCurrentTime(0)
+      return
     }
-    setIsPlaying(!isPlaying)
-  }, [audioRef, isPlaying])
+    setCurrentTime(0)
+    let newIndex = index
+    if (sequence === 1) {
+      newIndex = Math.floor(Math.random() * playList.length)
+    } else {
+      if ((newIndex + 1) > (playList.length - 1)) {
+        newIndex = 0
+      } else {
+        newIndex = newIndex + 1
+      }
+    }
+    dispatch(autoChangeSongAction(newIndex))
+  }
 
+  //切换上一首歌曲，根据sequence和index来判断
+  const changePrevSong = () => {
+    //如果歌单里面只有一首歌则直接重新播放
+    if (playList.length === 1) {
+      audioRef.current.currentTime = 0
+      setCurrentTime(0)
+      return
+    }
+    setCurrentTime(0)
+    let newIndex = index
+    if (sequence === 1) {
+      newIndex = Math.floor(Math.random() * playList.length)
+    } else {
+      if ((newIndex - 1) < 0) {
+        newIndex = playList.length - 1
+      } else {
+        newIndex = newIndex - 1
+      }
+    }
+    dispatch(autoChangeSongAction(newIndex))
+  }
 
-  //监听歌曲播放时间的函数,和格式化后的时间
+  //自动监听歌曲播放时间和播放进度的函数
   const songPlayTime = (e) => {
     if (!isChange) {
       setCurrentTime(e.target.currentTime * 1000)
@@ -108,6 +153,7 @@ export default memo(function GxkPlayerBar() {
     }
   }
 
+  //格式化后的时间
   const currentTimeFormated = getData(Math.floor(currentTime), 'mm:ss')
 
   //手动拖动进度条
@@ -121,11 +167,10 @@ export default memo(function GxkPlayerBar() {
     audioRef.current.currentTime = value / 100 * totalTime / 1000
     setCurrentTime(audioRef.current.currentTime * 1000)
     setIsChange(false)
-
-    if (!isPlaying) {
-      songPlayControl()
+    if (isPlaying) {
+      audioRef.current.play()
     }
-  }, [totalTime, isPlaying, songPlayControl])
+  }, [totalTime, isPlaying])
 
   //根据state里面的sequence来点击切换循环方式
   const changeSequence = useCallback(() => {
@@ -138,22 +183,16 @@ export default memo(function GxkPlayerBar() {
     dispatch(getChangeSequenceAction(num))
   }, [sequence, dispatch])
 
-  //当歌曲放完时自动切换歌曲,根据sequence和index来判断
+  //播放完自动切换歌曲，这个和手动切换的区别在于单曲循环时不会切换到其他歌曲
   const autoChangeSong = () => {
-    setCurrentTime(0)
-    let newIndex = index
-    if (sequence === 0) {
-      if ((newIndex + 1) > (playList.length - 1)) {
-        newIndex = 0
-      } else {
-        newIndex = newIndex + 1
-      }
-    } else if (sequence === 1) {
-      newIndex = Math.floor(Math.rendom() * playList.length)
+    //如果是循环或者随机播放那就调用切下一首歌的方法就行
+    if (sequence === 0 || sequence === 1) {
+      changeNextSong()
+    } else {
+      //如果是单曲循环那么直接重新播放就行
+      audioRef.current.play()
     }
-    dispatch(autoChangeSongAction(index))
   }
-
 
   //组件主要部分
   return (
@@ -162,9 +201,9 @@ export default memo(function GxkPlayerBar() {
 
         {/**播放控制部分 */}
         <Control isPlaying={isPlaying}>
-          <button className={'prev sprite_player'}></button>
+          <button className={'prev sprite_player'} onClick={() => { changePrevSong() }}></button>
           <button className={'play sprite_player'} onClick={() => { songPlayControl() }} ></button>
-          <button className={'next sprite_player'}></button>
+          <button className={'next sprite_player'} onClick={() => { changeNextSong() }}></button>
         </Control>
 
         {/**进度条部分 */}
@@ -213,7 +252,10 @@ export default memo(function GxkPlayerBar() {
           </div>
         </Operator>
       </div>
-      <audio ref={audioRef} onTimeUpdate={(e) => { songPlayTime(e) }}></audio>
+      <audio ref={audioRef}
+        onTimeUpdate={(e) => { songPlayTime(e) }}
+        onEnded={(e) => { autoChangeSong(e) }}
+      ></audio>
     </PlayerBarWrapper>
   )
 })

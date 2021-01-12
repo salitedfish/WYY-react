@@ -46,6 +46,6 @@ function padLeftZero(str) {
 };
 
 //这个是拼接播放歌曲链接的函数
-export const getPlaySong = (url, id) => {
+export const getPlaySong = (url = 'https://music.163.com/song/media/outer/url', id) => {
   return url + '?id=' + id + '.mp3'
 }

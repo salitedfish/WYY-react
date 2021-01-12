@@ -9,3 +9,13 @@ export function getSong(ids = 0) {
     }
   })
 }
+
+//通过歌曲id请求歌词
+export function getSongWords(id = 0) {
+  return myAxios({
+    url: '/lyric',
+    params: {
+      id
+    }
+  })
+}

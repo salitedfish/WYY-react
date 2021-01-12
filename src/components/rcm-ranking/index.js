@@ -1,12 +1,12 @@
 import React, { memo } from 'react'
-import { useDispatch } from "react-redux"
+import { shallowEqual, useDispatch, useSelector } from "react-redux"
 
 //导入图片处理函数，这里比较特殊，因为父组件都是通过子组件数组
 //渲染的方式使用子组件，当数组为空时就不会出现找不到数组的情况，
 //而现在是直接通过对象获取数据，如果对象为空，会找不到数据而报错，
 //因此要加一层判断
 import { getImgUrl } from "@/utils/data-format"
-import { getSongAction, addSongAction } from "@/views/player/store"
+import { getSongAction, addSongAction,changeIsplaying } from "@/views/player/store"
 
 //导入样式及功能组件
 import { RankingWrapper } from "./style.js"
@@ -16,9 +16,15 @@ export default memo(function GxkRanking(props) {
   const { data } = props
 
   const dispatch = useDispatch()
+  const isPlaying = useSelector((state)=>{
+    return state.get('player').get('isPlaying')
+  },shallowEqual)
 
   //根据id派发改变store里面的player数据
   const playSong = (id) => {
+    if(!isPlaying) {
+      dispatch(changeIsplaying(!isPlaying))
+    }
     dispatch(getSongAction(id))
   }
 

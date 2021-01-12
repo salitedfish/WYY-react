@@ -127,7 +127,7 @@ export const Operator = styled.div`
   display: flex;
   position: relative;
   top: 5px;
-
+  
   .btn {
     width: 25px;
     height: 25px;
@@ -152,7 +152,7 @@ export const Operator = styled.div`
     width: 126px;
     padding-left: 13px;
     background-position: -147px -248px;
-    
+
     .volume {
       background-position: -2px -248px;
       &:hover {
@@ -174,7 +174,7 @@ export const Operator = styled.div`
     }
 
     .playlist {
-      width: 59px;
+      width: 55px;
       background-position: -42px -68px;
     }
   }
