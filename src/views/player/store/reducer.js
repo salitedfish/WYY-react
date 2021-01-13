@@ -6,7 +6,8 @@ import {
   CHANGE_SONG_INDEX,
   CHNAGE_SEQUENCE,
   CHANGE_ISPLAYING,
-  CHANGE_SONGWORDS
+  CHANGE_SONGWORDS,
+  CHANGE_CURRENTLYRIC
 } from './static'
 
 const defaultState = Map({
@@ -15,7 +16,8 @@ const defaultState = Map({
   playList: [],
   sequence: 0,//0为循环，1为随机，2为单曲
   isPlaying: false,
-  lyricList: []
+  lyricList: [],
+  currentLyricTime: 0,
 })
 
 //这个是player的store的reducer
@@ -33,6 +35,8 @@ const reducer = (state = defaultState, action) => {
       return state.set('isPlaying', action.isPlaying)
     case CHANGE_SONGWORDS:
       return state.set('lyricList', action.lyricList)
+    case CHANGE_CURRENTLYRIC:
+      return state.set('currentLyricTime', action.currentLyricTime)
     default:
       return state
   }

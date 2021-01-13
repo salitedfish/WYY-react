@@ -9,7 +9,8 @@ import {
   CHANGE_PLAY_LIST,
   CHNAGE_SEQUENCE,
   CHANGE_ISPLAYING,
-  CHANGE_SONGWORDS
+  CHANGE_SONGWORDS,
+  CHANGE_CURRENTLYRIC
 } from './static'
 
 import { parseLyric } from "@/utils/lyric-parse.js"
@@ -131,5 +132,13 @@ export const getSongWordsAction = (id) => {
         lyricList
       })
     })
+  }
+}
+
+//将播放到的歌词的时间保存到redux里面
+export const changeCurrentLyricAction = (currentLyricTime) => {
+  return {
+    type: CHANGE_CURRENTLYRIC,
+    currentLyricTime
   }
 }

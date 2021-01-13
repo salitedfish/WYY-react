@@ -12,6 +12,30 @@ export const PlayerBarWrapper = styled.div`
   background-repeat: repeat;
   z-index: 999;
 
+  .currentLyric {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%,-55px);
+      width: 100%;
+      height: 60px;
+      background-color: rgba(0,0,0,.4);
+      border-radius: 20px 20px 0 0;
+      text-align: center;
+      .content{
+        display: block;
+        height: 60px;
+        font-size: 32px;
+        line-height: 60px;
+        cursor: pointer;
+        text-decoration: none;
+        color: #ddd;
+      }
+      &:hover {
+        background-color: rgba(0,0,0,.5);
+        color: #fff;
+      }
+    }
+
   .content {
     display: flex;
     align-items: center;
@@ -21,6 +45,7 @@ export const PlayerBarWrapper = styled.div`
     transform: translateX(-50%);
     bottom: 0;
     height: 47px;
+
   }
 `
 

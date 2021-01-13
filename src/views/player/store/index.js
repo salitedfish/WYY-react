@@ -5,7 +5,8 @@ import {
   autoChangeSongAction,
   getChangeSequenceAction,
   changeIsplaying,
-  getSongWordsAction
+  getSongWordsAction,
+  changeCurrentLyricAction
 } from "./actions"
 
 //统一导入这个store的reducer
@@ -18,6 +19,7 @@ export {
   autoChangeSongAction,
   getChangeSequenceAction,
   changeIsplaying,
-  getSongWordsAction
+  getSongWordsAction,
+  changeCurrentLyricAction
 }
 export { reducer }

@@ -10,6 +10,17 @@ export const PlayerWrapper = styled.div`
 
 export const PlayerLeft = styled.div`
   width: 710px;
+  text-align: center;
+  button {
+    cursor:pointer;
+  }
+  .jiantou {
+    display: inline-block;
+    transform: ${(props)=>{return props.showAll?'rotateZ(-90deg)':'rotateZ(90deg)'}};
+  }
+  .red {
+    color: red;
+  }
 `
 
 export const PlayerRight = styled.div`

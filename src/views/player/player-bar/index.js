@@ -20,7 +20,8 @@ import {
   getSongAction,
   autoChangeSongAction,
   getChangeSequenceAction,
-  changeIsplaying
+  changeIsplaying,
+  changeCurrentLyricAction
 } from "../store"
 
 import {
@@ -41,14 +42,13 @@ import {
 
 
 //定义和导出组件
-export default memo(function GxkPlayerBar() {
-
+export default memo(function GxkPlayerBar(props) {
 
   //使用useState管理本组件数据
   const [currentTime, setCurrentTime] = useState(0)
   const [songProgress, setSongProgress] = useState(0)
   const [isChange, setIsChange] = useState(false)
-
+  const [currentLyric, changeCurrentLyric] = useState('')
 
   //使用react-redux的hook生成dispatch和store的数据
   const dispatch = useDispatch()
@@ -67,6 +67,12 @@ export default memo(function GxkPlayerBar() {
   const song = useSelector((state) => {
     return state.get('player').get('currentSong')
   }, shallowEqual)
+  const lyricList = useSelector((state) => {
+    return state.get('player').get('lyricList')
+  }, shallowEqual)
+  const currentLyricTime = useSelector((state) => {
+    return state.get('player').get('currentLyricTime')
+  })
 
   //使用react的hook，做和类组件生命周期函数类似的工作,注意不同功能的effect最好不要写在一起
   //以免引起不必要的刷新
@@ -147,10 +153,29 @@ export default memo(function GxkPlayerBar() {
 
   //自动监听歌曲播放时间和播放进度的函数
   const songPlayTime = (e) => {
+    const targetTime = e.target.currentTime * 1000
     if (!isChange) {
-      setCurrentTime(e.target.currentTime * 1000)
+      setCurrentTime(targetTime)
       setSongProgress(((currentTime / totalTime) || 0) * 100)
     }
+    //根据播放时间，拿取歌词,注意这个时间不是currentTime，而是真正的播放时间
+    lyricList.forEach((item, index) => {
+      let prevTime = 0
+      let nextTime = 0
+      if (index > 0) {
+        prevTime = lyricList[index - 1].time
+        nextTime = item.time
+      }
+      if (targetTime >= prevTime && targetTime < nextTime) {
+        //把获取到的歌词赋值给currentLyric,并且把时间保存到redux里面
+        changeCurrentLyric(lyricList[index - 1] ? lyricList[index - 1].content : '')
+        //并且把时间保存到redux里面
+        console.log(prevTime)
+        if (currentLyricTime !== prevTime) {
+          dispatch(changeCurrentLyricAction(prevTime))
+        }
+      }
+    })
   }
 
   //格式化后的时间
@@ -197,8 +222,11 @@ export default memo(function GxkPlayerBar() {
   //组件主要部分
   return (
     <PlayerBarWrapper className={'sprite_player'} >
+      {/*歌词展示部分 */}
+      {
+        currentLyric ? <div className={'currentLyric'}><NavLink className={'content'} to='/discover/player'>{currentLyric}</NavLink></div> : ''
+      }
       <div className={'content wrap-v2'}>
-
         {/**播放控制部分 */}
         <Control isPlaying={isPlaying}>
           <button className={'prev sprite_player'} onClick={() => { changePrevSong() }}></button>
