@@ -14,7 +14,7 @@ import { Redirect } from "react-router-dom"
 // import GxkSingers from "@/views/discover/c-views/singers"
 // import GxkAlbum from "@/views/discover/c-views/album"
 // import GxkPlayer from "@/views/player"
-
+ 
 const GxkDiscover = lazy(() => { return import("@/views/discover") })
 const GxkMine = lazy(() => { return import("@/views/mine") })
 const GxkFriend = lazy(() => { return import("@/views/friend") })

@@ -5,4 +5,4 @@ import App from "./App.js"
 
 import "@/assets/css/base.css"
 
-ReactDOM.render(<Suspense fallback={''}><App></App></Suspense>, document.getElementById("root"))
+ReactDOM.render(<Suspense fallback={'loading'}><App></App></Suspense>, document.getElementById("root"))
