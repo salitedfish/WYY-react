@@ -1,18 +1,31 @@
+import { lazy } from "react"
 import { Redirect } from "react-router-dom"
 
-//下面的基础路由
-import GxkDiscover from "@/views/discover"
-import GxkMine from "@/views/mine"
-import GxkFriend from "@/views/friend"
+// //下面的基础路由
+// import GxkDiscover from "@/views/discover"
+// import GxkMine from "@/views/mine"
+// import GxkFriend from "@/views/friend"
 
-//下面为discover的子路由
-import GxkRecommend from "@/views/discover/c-views/recommend"
-import GxkRanking from "@/views/discover/c-views/ranking"
-import GxkSongs from "@/views/discover/c-views/songs"
-import GxkDjradio from "@/views/discover/c-views/djradio"
-import GxkSingers from "@/views/discover/c-views/singers"
-import GxkAlbum from "@/views/discover/c-views/album"
-import GxkPlayer from "@/views/player"
+// //下面为discover的子路由
+// import GxkRecommend from "@/views/discover/c-views/recommend"
+// import GxkRanking from "@/views/discover/c-views/ranking"
+// import GxkSongs from "@/views/discover/c-views/songs"
+// import GxkDjradio from "@/views/discover/c-views/djradio"
+// import GxkSingers from "@/views/discover/c-views/singers"
+// import GxkAlbum from "@/views/discover/c-views/album"
+// import GxkPlayer from "@/views/player"
+
+const GxkDiscover = lazy(() => { return import("@/views/discover") })
+const GxkMine = lazy(() => { return import("@/views/mine") })
+const GxkFriend = lazy(() => { return import("@/views/friend") })
+const GxkRecommend = lazy(() => { return import("@/views/discover/c-views/recommend") })
+const GxkRanking = lazy(() => { return import("@/views/discover/c-views/ranking") })
+const GxkSongs = lazy(() => { return import("@/views/discover/c-views/songs") })
+const GxkDjradio = lazy(() => { return import("@/views/discover/c-views/djradio") })
+const GxkSingers = lazy(() => { return import("@/views/discover/c-views/singers") })
+const GxkAlbum = lazy(() => { return import("@/views/discover/c-views/album") })
+const GxkPlayer = lazy(() => { return import("@/views/player") })
+
 
 const routes = [
   {
@@ -30,7 +43,7 @@ const routes = [
       {
         path: '/discover',
         exact: true,
-        render: ()=>{
+        render: () => {
           return <Redirect to="/discover/recommend"></Redirect>
         },
       },
